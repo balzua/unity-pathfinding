@@ -50,7 +50,7 @@ public class NodeGrid : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // Gets a Node from a set of grid coordinates
