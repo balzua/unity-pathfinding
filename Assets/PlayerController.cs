@@ -25,13 +25,20 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Player"))
                 {
-                    // Get the player position as a Node coordinate
-                    
                     // Find the range.
                     List<Node> walkableArea = pathfinder.FindRange(transform.position, range);
                     foreach (Node node in walkableArea)
                     {
                         node.worldObject.GetComponent<Renderer>().material = inRange;
+                    }
+                }
+                if (hit.collider.CompareTag("Tile"))
+                {
+                    // Find the path.
+                    List<Node> path = pathfinder.FindPath(transform.position, hit.transform.position);
+                    foreach (Node node in path)
+                    {
+                        node.worldObject.GetComponent<Renderer>().material = current;
                     }
                 }
             }

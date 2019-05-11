@@ -8,10 +8,10 @@ public class Node
     public int y;
     public int z;
 
-    public float gCost;
-    public float hCost;
+    public int gCost;
+    public int hCost;
 
-    public float fCost
+    public int fCost
     {
         get
         {

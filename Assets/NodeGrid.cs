@@ -71,7 +71,6 @@ public class NodeGrid : MonoBehaviour {
         int x = Mathf.RoundToInt(position.x);
         int y = Mathf.RoundToInt(position.y);
         int z = Mathf.RoundToInt(position.z);
-        Debug.Log("Looking for: " + x + ", " + y + ", " + z);
         return GetNode(x, y, z);
     }
 
@@ -99,7 +98,7 @@ public class NodeGrid : MonoBehaviour {
         Node botLeft = GetNode(node.x - 1, node.y, node.z - 1);
         if (botLeft != null) allNeighbors.Add(botLeft);
 
-        Node bot = GetNode(node.x, node.y, node.z + 1);
+        Node bot = GetNode(node.x, node.y, node.z - 1);
         if (bot != null) allNeighbors.Add(bot);
 
         Node botRight = GetNode(node.x + 1, node.y, node.z - 1);
