@@ -5,18 +5,15 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     //Temporary
-    public NodeGrid grid;
-    public int range = 40;
-    public Node startPosition;
-    public Material colored;
+    private NodeGrid grid;
 
-    public List<Node> FindRange()
+    public List<Node> FindRange(Vector3 startPosition, int range)
     {
-        startPosition = grid.GetNode(1, 0, 1);
+        Node startingNode = grid.GetNodeFromWorldPosition(startPosition);
         List<Node> inRange = new List<Node>();
         Queue<Node> BFSQueue = new Queue<Node>();
         bool[,,] searched = new bool[grid.maxX, grid.maxY, grid.maxZ];
-        BFSQueue.Enqueue(startPosition);
+        BFSQueue.Enqueue(startingNode);
         while (BFSQueue.Count > 0)
         {
             Node current = BFSQueue.Dequeue();
@@ -24,7 +21,7 @@ public class PathFinder : MonoBehaviour
             List<Node> neighbors = grid.GetNodeNeighbors(current);
             foreach (Node neighbor in neighbors)
             {
-                if (range - GetDistance(startPosition, neighbor) > 0 && !searched[neighbor.x, neighbor.y, neighbor.z])
+                if (range - GetDistance(startingNode, neighbor) > 0 && !searched[neighbor.x, neighbor.y, neighbor.z])
                 {
                     BFSQueue.Enqueue(neighbor);
                     searched[neighbor.x, neighbor.y, neighbor.z] = true;
@@ -34,15 +31,7 @@ public class PathFinder : MonoBehaviour
         return inRange;
     }
 
-    // Temporary, colors tiles that are in range to visualize.
-    public void VisualizeRange()
-    {
-        List<Node> range = FindRange();
-        foreach(Node node in range)
-        {
-            node.worldObject.GetComponent<Renderer>().material = colored;
-        }
-    }
+
 
     // Get the distance between two arbitrary nodes
     private int GetDistance(Node a, Node b)
@@ -57,9 +46,9 @@ public class PathFinder : MonoBehaviour
         return 14 * distX + 10 * (distZ - distX) + 10 * distY;
     }
 
-    private void Start()
+    private void Awake()
     {
-        VisualizeRange();
+        grid = GetComponent<NodeGrid>();
     }
 
 

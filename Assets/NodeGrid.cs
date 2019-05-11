@@ -32,7 +32,7 @@ public class NodeGrid : MonoBehaviour {
                     float yPos = y * yOffset;
                     float zPos = z * zOffset;
                     //Instantiate a tile at this grid position
-                    GameObject tile = Instantiate(gridFloorPrefab, new Vector3(xPos, yPos, zPos), Quaternion.identity, transform) as GameObject;
+                    GameObject tile = Instantiate(gridFloorPrefab, new Vector3(xPos, yPos, zPos), gridFloorPrefab.transform.rotation, transform) as GameObject;
                     tile.transform.name = "(" + x.ToString() + ", " + y.ToString() + ", " + z.ToString() + ")";
 
                     //Create a node and assign it the proper coordinates and assign it the corresponding world tile, then place it into the grid array of nodes
@@ -71,6 +71,7 @@ public class NodeGrid : MonoBehaviour {
         int x = Mathf.RoundToInt(position.x);
         int y = Mathf.RoundToInt(position.y);
         int z = Mathf.RoundToInt(position.z);
+        Debug.Log("Looking for: " + x + ", " + y + ", " + z);
         return GetNode(x, y, z);
     }
 
