@@ -23,47 +23,50 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (selected)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                if (hit.collider.CompareTag("Tile"))
-                {
-                    // Find the path.
-                    List<Node> path = pathfinder.FindPath(transform.position, hit.transform.position);
-                    if (path[path.Count - 1] != lastTargetTile)
-                    {
-                        lastTargetTile = path[path.Count - 1];
-                        if (lastPath != null)
-                        {
-                            foreach (Node node in lastPath)
-                            {
-                                node.worldObject.GetComponent<Renderer>().material = inRange;
-                            }
-                        }
-                        foreach (Node node in path)
-                        {
-                            node.worldObject.GetComponent<Renderer>().material = inPath;
-                        }
-                        lastPath = path;
-                    }
-                }
-            }
-        }
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            if (selected)
             {
-                if (hit.collider.CompareTag("Player"))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
                 {
-                    selected = true;
-                    // Find the range.
-                    walkableArea = pathfinder.FindRange(transform.position, range);
-                    foreach (Node node in walkableArea)
+                    if (hit.collider.CompareTag("Tile"))
                     {
-                        node.worldObject.GetComponent<Renderer>().material = inRange;
+                        // If the mouse cursor is over a new tile than it was in the previous frame, remove the old path and calculate a new one.
+                        Node targetNode = pathfinder.TargetNodeFromWorldPosition(hit.transform.position);
+                        if (!targetNode.Equals(lastTargetTile))
+                        {
+                            if (lastPath != null)
+                            {
+                                foreach (Node node in lastPath)
+                                {
+                                    node.worldObject.GetComponent<Renderer>().material = inRange;
+                                }
+                            }
+                            List<Node> path = pathfinder.FindPath(transform.position, hit.transform.position);
+                            lastTargetTile = targetNode;
+                            foreach (Node node in path)
+                            {
+                                node.worldObject.GetComponent<Renderer>().material = inPath;
+                            }
+                            lastPath = path;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+                {
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        selected = true;
+                        // Find the range.
+                        walkableArea = pathfinder.FindRange(transform.position, range);
+                        foreach (Node node in walkableArea)
+                        {
+                            node.worldObject.GetComponent<Renderer>().material = inRange;
+                        }
                     }
                 }
             }

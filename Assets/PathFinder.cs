@@ -37,7 +37,7 @@ public class PathFinder : MonoBehaviour
         Node target = grid.GetNodeFromWorldPosition(endPosition);
 
         // Later: On openset, we need to be able to find minimum quickly. Will replace this with a heap data structure later.
-        List<Node> openSet = new List<Node>();
+        Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
         HashSet<Node> closedSet = new HashSet<Node>();
 
         // Add the starting node to the open set.
@@ -45,15 +45,8 @@ public class PathFinder : MonoBehaviour
 
         while (openSet.Count > 0)
         {
-            Node current = openSet[0]; // Change later, this line should actually be current = Minimum of openset.
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].fCost < current.fCost || openSet[i].fCost == current.fCost && openSet[i].hCost < current.hCost)
-                {
-                    current = openSet[i];
-                }
-            }
-            openSet.Remove(current);
+            Node current = openSet.GetMinimum(); // Change later, this line should actually be current = Minimum of openset.
+
             // Add the current node to the closed set. We do this, then consider all of this node's neighbors. 
             // After all neighbors are considered, the node is considered closed.
             closedSet.Add(current);
@@ -77,6 +70,7 @@ public class PathFinder : MonoBehaviour
                     // Update the neighbor's fCost by setting its g and h costs.
                     neighbor.gCost = newPathCost;
                     neighbor.hCost = GetDistance(neighbor, target);
+                    openSet.UpdateItem(neighbor);
                     // The "parentNode" field refers to which node led us to this one, i.e. the node that preceded this in the path
                     neighbor.parentNode = current;
 
@@ -86,9 +80,14 @@ public class PathFinder : MonoBehaviour
             }
 
         }
-        Debug.Log("error");
+
         return new List<Node>();
     } 
+
+    public Node TargetNodeFromWorldPosition(Vector3 position)
+    {
+        return grid.GetNodeFromWorldPosition(position);
+    }
 
     // Once the path has been found, this function retraces the path and generates a list of nodes along the way
     private List<Node> RetracePath(Node start, Node end)

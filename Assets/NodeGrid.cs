@@ -47,10 +47,12 @@ public class NodeGrid : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    // Return the maximum size for a grid of this dimension
+    public int MaxSize
     {
-
+        get {
+            return maxX * maxY * maxZ;
+        }
     }
 
     // Gets a Node from a set of grid coordinates

@@ -226,9 +226,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathfinder: {fileID: 832697713}
-  inRange: {fileID: 2100000, guid: 1693061954f0e1c4d8c59b8bff072ab3, type: 2}
-  current: {fileID: 2100000, guid: 352f1813d5e841d47a53a03b415935af, type: 2}
   range: 35
+  inPath: {fileID: 2100000, guid: 352f1813d5e841d47a53a03b415935af, type: 2}
+  inRange: {fileID: 2100000, guid: 1693061954f0e1c4d8c59b8bff072ab3, type: 2}
+  undecorated: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,8 +461,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.34608805, y: 0.0000010095539, z: 0.0000018198629, w: 0.9382021}
-  m_LocalPosition: {x: 5.0156918, y: 7.1869154, z: -6.772676}
+  m_LocalRotation: {x: 0.70710677, y: 2.842171e-13, z: -2.842171e-14, w: 0.7071068}
+  m_LocalPosition: {x: 5.0157375, y: 11.618371, z: 4.254452}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
