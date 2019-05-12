@@ -11,13 +11,12 @@ public class PlayerController : MonoBehaviour
     public Material inRange;
     public Material undecorated;
     List<Node> walkableArea;
-    Node lastTargetTile;
-    List<Node> lastPath;
+    LineRenderer line;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        line = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -32,25 +31,9 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("Tile"))
                     {
-                        // If the mouse cursor is over a new tile than it was in the previous frame, remove the old path and calculate a new one.
-                        Node targetNode = pathfinder.TargetNodeFromWorldPosition(hit.transform.position);
-                        if (!targetNode.Equals(lastTargetTile))
-                        {
-                            if (lastPath != null)
-                            {
-                                foreach (Node node in lastPath)
-                                {
-                                    node.worldObject.GetComponent<Renderer>().material = inRange;
-                                }
-                            }
-                            List<Node> path = pathfinder.FindPath(transform.position, hit.transform.position);
-                            lastTargetTile = targetNode;
-                            foreach (Node node in path)
-                            {
-                                node.worldObject.GetComponent<Renderer>().material = inPath;
-                            }
-                            lastPath = path;
-                        }
+                        Vector3[] path = pathfinder.FindPath(transform.position, hit.transform.position);
+                        line.positionCount = path.Length;
+                        line.SetPositions(path);
                     }
                 }
             }

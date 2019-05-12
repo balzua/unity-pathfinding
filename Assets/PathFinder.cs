@@ -31,7 +31,7 @@ public class PathFinder : MonoBehaviour
         return inRange;
     }
 
-    public List<Node> FindPath(Vector3 startPosition, Vector3 endPosition)
+    public Vector3[] FindPath(Vector3 startPosition, Vector3 endPosition)
     {
         Node start = grid.GetNodeFromWorldPosition(startPosition);
         Node target = grid.GetNodeFromWorldPosition(endPosition);
@@ -70,18 +70,19 @@ public class PathFinder : MonoBehaviour
                     // Update the neighbor's fCost by setting its g and h costs.
                     neighbor.gCost = newPathCost;
                     neighbor.hCost = GetDistance(neighbor, target);
-                    openSet.UpdateItem(neighbor);
                     // The "parentNode" field refers to which node led us to this one, i.e. the node that preceded this in the path
                     neighbor.parentNode = current;
 
                     if (!openSet.Contains(neighbor))
                         openSet.Add(neighbor);
+                    else
+                        openSet.UpdateItem(neighbor);
                 }
             }
 
         }
 
-        return new List<Node>();
+        return new Vector3[0];
     } 
 
     public Node TargetNodeFromWorldPosition(Vector3 position)
@@ -90,7 +91,7 @@ public class PathFinder : MonoBehaviour
     }
 
     // Once the path has been found, this function retraces the path and generates a list of nodes along the way
-    private List<Node> RetracePath(Node start, Node end)
+    private Vector3[] RetracePath(Node start, Node end)
     {
         List<Node> path = new List<Node>();
         Node current = end;
@@ -99,8 +100,14 @@ public class PathFinder : MonoBehaviour
             path.Add(current);
             current = current.parentNode;
         }
+        path.Add(current);
         path.Reverse();
-        return path;
+        Vector3[] vertices = new Vector3[path.Count];
+        for (int i = 0; i < path.Count; i++)
+        {
+            vertices[i] = new Vector3(path[i].worldObject.transform.position.x, path[i].worldObject.transform.position.y + 0.05f, path[i].worldObject.transform.position.z);
+        }
+        return vertices;
     }
 
     // Get the distance between two arbitrary nodes
